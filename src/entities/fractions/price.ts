@@ -1,4 +1,4 @@
-import JSBI from 'jsbi'
+import bigInt from 'big-integer'
 import invariant from 'tiny-invariant'
 
 import { BigintIsh, Rounding } from '../../constants'
@@ -38,8 +38,8 @@ export class Price<TBase extends Currency, TQuote extends Currency> extends Frac
     this.baseCurrency = baseCurrency
     this.quoteCurrency = quoteCurrency
     this.scalar = new Fraction(
-      JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(baseCurrency.decimals)),
-      JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(quoteCurrency.decimals))
+      bigInt(10).pow(bigInt(baseCurrency.decimals)),
+      bigInt(10).pow(bigInt(quoteCurrency.decimals))
     )
   }
 

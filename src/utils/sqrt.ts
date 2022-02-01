@@ -1,31 +1,34 @@
-import JSBI from 'jsbi'
+import bigInt, { BigInteger } from 'big-integer'
 import invariant from 'tiny-invariant'
 
-export const MAX_SAFE_INTEGER = JSBI.BigInt(Number.MAX_SAFE_INTEGER)
+export const MAX_SAFE_INTEGER = bigInt(Number.MAX_SAFE_INTEGER)
 
-const ZERO = JSBI.BigInt(0)
-const ONE = JSBI.BigInt(1)
-const TWO = JSBI.BigInt(2)
+const ZERO = bigInt(0)
+const ONE = bigInt(1)
+const TWO = bigInt(2)
 
 /**
  * Computes floor(sqrt(value))
  * @param value the value for which to compute the square root, rounded down
  */
-export function sqrt(value: JSBI): JSBI {
-  invariant(JSBI.greaterThanOrEqual(value, ZERO), 'NEGATIVE')
+export function sqrt(value: BigInteger): BigInteger {
+  invariant(value.greaterOrEquals(ZERO), 'NEGATIVE')
 
   // rely on built in sqrt if possible
-  if (JSBI.lessThan(value, MAX_SAFE_INTEGER)) {
-    return JSBI.BigInt(Math.floor(Math.sqrt(JSBI.toNumber(value))))
+  if (value.lesser(MAX_SAFE_INTEGER)) {
+    return bigInt(Math.floor(Math.sqrt(value.toJSNumber())))
   }
 
-  let z: JSBI
-  let x: JSBI
+  let z: BigInteger
+  let x: BigInteger
   z = value
-  x = JSBI.add(JSBI.divide(value, TWO), ONE)
-  while (JSBI.lessThan(x, z)) {
+  x = value.divide(TWO).add(ONE)
+  while (x.lesser(z)) {
     z = x
-    x = JSBI.divide(JSBI.add(JSBI.divide(value, x), x), TWO)
+    x = value
+      .divide(x)
+      .add(x)
+      .divide(TWO)
   }
   return z
 }

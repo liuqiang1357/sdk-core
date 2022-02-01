@@ -1,7 +1,7 @@
-import JSBI from 'jsbi'
+import bigInt, { BigInteger } from 'big-integer'
 
 // exports for external consumption
-export type BigintIsh = JSBI | string | number
+export type BigintIsh = BigInteger | number | string
 
 export enum TradeType {
   EXACT_INPUT,
@@ -14,4 +14,4 @@ export enum Rounding {
   ROUND_UP
 }
 
-export const MaxUint256 = JSBI.BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+export const MaxUint256 = bigInt('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff', 16)
