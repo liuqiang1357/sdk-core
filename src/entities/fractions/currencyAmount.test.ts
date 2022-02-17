@@ -36,20 +36,6 @@ describe('CurrencyAmount', () => {
     const amount = CurrencyAmount.fromRawAmount(new Token(1, ADDRESS_ONE, 18), MaxUint256)
     expect(amount.quotient).toEqual(MaxUint256)
   })
-  it('token amount cannot exceed max uint256', () => {
-    expect(() => CurrencyAmount.fromRawAmount(new Token(1, ADDRESS_ONE, 18), MaxUint256.add(bigInt(1)))).toThrow(
-      'AMOUNT'
-    )
-  })
-  it('token amount quotient cannot exceed max uint256', () => {
-    expect(() =>
-      CurrencyAmount.fromFractionalAmount(
-        new Token(1, ADDRESS_ONE, 18),
-        MaxUint256.multiply(bigInt(2)).add(bigInt(2)),
-        bigInt(2)
-      )
-    ).toThrow('AMOUNT')
-  })
   it('token amount numerator can be gt. uint256 if denominator is gt. 1', () => {
     const amount = CurrencyAmount.fromFractionalAmount(new Token(1, ADDRESS_ONE, 18), MaxUint256.add(bigInt(2)), 2)
     expect(amount.numerator).toEqual(bigInt(2).add(MaxUint256))
