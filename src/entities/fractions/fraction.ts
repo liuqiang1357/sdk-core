@@ -130,7 +130,11 @@ export class Fraction {
 
     Big.DP = decimalPlaces
     Big.RM = toFixedRounding[rounding]
-    return new Big(this.numerator.toString()).div(this.denominator.toString()).toFormat(decimalPlaces, format)
+
+    const bi = this.numerator.multiply(bigInt(10).pow(decimalPlaces + 1)).divide(this.denominator)
+    return new Big(bi.toString())
+      .div(new Big(10).pow(decimalPlaces + 1))
+      .toFormat(decimalPlaces, toFixedRounding[rounding], format)
   }
 
   /**
