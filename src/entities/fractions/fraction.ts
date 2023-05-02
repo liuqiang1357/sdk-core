@@ -5,6 +5,7 @@ import _Big, { RoundingMode } from 'big.js'
 import toFormat from 'toformat'
 
 import { BigintIsh, Rounding } from '../../constants'
+import BigNumber from 'bignumber.js'
 
 const Decimal = toFormat(_Decimal)
 const Big = toFormat(_Big)
@@ -19,6 +20,12 @@ const toFixedRounding = {
   [Rounding.ROUND_DOWN]: RoundingMode.RoundDown,
   [Rounding.ROUND_HALF_UP]: RoundingMode.RoundHalfUp,
   [Rounding.ROUND_UP]: RoundingMode.RoundUp
+}
+
+const toDecimalRounding = {
+  [Rounding.ROUND_DOWN]: BigNumber.ROUND_DOWN,
+  [Rounding.ROUND_HALF_UP]: BigNumber.ROUND_HALF_UP,
+  [Rounding.ROUND_UP]: BigNumber.ROUND_UP
 }
 
 export class Fraction {
@@ -131,6 +138,22 @@ export class Fraction {
     Big.DP = decimalPlaces
     Big.RM = toFixedRounding[rounding]
     return new Big(this.numerator.toString()).div(this.denominator.toString()).toFormat(decimalPlaces, format)
+  }
+
+  public toString(
+    decimalPlaces: number,
+    rounding: Rounding = Rounding.ROUND_HALF_UP
+  ): string {
+    invariant(Number.isInteger(decimalPlaces), `${decimalPlaces} is not an integer.`)
+    invariant(decimalPlaces >= 0, `${decimalPlaces} is negative.`)
+
+    const oldConfig = BigNumber.config()
+    try {
+      BigNumber.config({ DECIMAL_PLACES: decimalPlaces, ROUNDING_MODE: toDecimalRounding[rounding] })
+      return new BigNumber(this.numerator.toString()).div(this.denominator.toString()).decimalPlaces(decimalPlaces).toString()
+    } finally {
+      BigNumber.config(oldConfig)
+    }
   }
 
   /**
