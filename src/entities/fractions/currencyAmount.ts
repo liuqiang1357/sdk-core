@@ -82,10 +82,6 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
     return super.divide(this.decimalScale).toFixed(decimalPlaces, format, rounding)
   }
 
-  public toString(decimalPlaces: number = this.currency.decimals, rounding?: Rounding): string {
-    return super.divide(this.decimalScale).toString(decimalPlaces, rounding);
-  }
-
   public toExact(format: object = { groupSeparator: '' }): string {
     Big.DP = this.currency.decimals
     return new Big(this.quotient.toString()).div(this.decimalScale.toString()).toFormat(format)
