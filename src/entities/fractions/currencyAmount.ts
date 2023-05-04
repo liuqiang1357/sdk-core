@@ -82,7 +82,7 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
     return super.divide(this.decimalScale).toFixed(decimalPlaces, format, rounding)
   }
 
-  public toString(decimalPlaces: number = 4, rounding?: Rounding): string {
+  public toString(decimalPlaces: number = this.currency.decimals, rounding?: Rounding): string {
     return super.divide(this.decimalScale).toString(decimalPlaces, rounding);
   }
 
