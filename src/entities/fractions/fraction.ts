@@ -96,7 +96,7 @@ export class Fraction {
 
   public lessThan(other: Fraction | BigintIsh): boolean {
     const otherParsed = Fraction.tryParseFraction(other)
-    const difference = this.subtract(otherParsed)
+    const difference = this.asFraction.subtract(otherParsed)
     return (
       (difference.numerator.isNegative() && !difference.denominator.isNegative()) ||
       (difference.numerator.isPositive() && difference.denominator.isNegative())
@@ -108,13 +108,13 @@ export class Fraction {
     if (this.denominator.isZero() && otherParsed.denominator.isZero()) {
       return this.numerator.equals(otherParsed.numerator)
     }
-    const difference = this.subtract(otherParsed)
+    const difference = this.asFraction.subtract(otherParsed)
     return difference.numerator.isZero() && !difference.denominator.isZero()
   }
 
   public greaterThan(other: Fraction | BigintIsh): boolean {
     const otherParsed = Fraction.tryParseFraction(other)
-    const difference = this.subtract(otherParsed)
+    const difference = this.asFraction.subtract(otherParsed)
     return (
       (difference.numerator.isPositive() && !difference.denominator.isNegative()) ||
       (difference.numerator.isNegative() && difference.denominator.isNegative())
