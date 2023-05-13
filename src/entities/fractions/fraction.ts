@@ -26,8 +26,16 @@ export class Fraction {
   public readonly denominator: BigInteger
 
   public constructor(numerator: BigintIsh, denominator: BigintIsh = bigInt(1)) {
-    this.numerator = bigInt(numerator)
-    this.denominator = bigInt(denominator)
+    const numeratorBi = bigInt(numerator)
+    const denominatorBi = bigInt(denominator)
+
+    this.numerator =
+      denominatorBi.isZero() && !numeratorBi.isZero()
+        ? numeratorBi.isPositive()
+          ? bigInt(1)
+          : bigInt(-1)
+        : numeratorBi
+    this.denominator = numeratorBi.isZero() && !denominatorBi.isZero() ? bigInt(1) : denominatorBi
   }
 
   private static tryParseFraction(fractionish: BigintIsh | Fraction): Fraction {
@@ -54,6 +62,12 @@ export class Fraction {
 
   public add(other: Fraction | BigintIsh): Fraction {
     const otherParsed = Fraction.tryParseFraction(other)
+    if (
+      (this.numerator.isZero() && this.denominator.isZero()) ||
+      (otherParsed.numerator.isZero() && otherParsed.denominator.isZero())
+    ) {
+      return new Fraction(0, 0)
+    }
     if (this.denominator.equals(otherParsed.denominator)) {
       return new Fraction(this.numerator.add(otherParsed.numerator), this.denominator)
     }
@@ -65,6 +79,12 @@ export class Fraction {
 
   public subtract(other: Fraction | BigintIsh): Fraction {
     const otherParsed = Fraction.tryParseFraction(other)
+    if (
+      (this.numerator.isZero() && this.denominator.isZero()) ||
+      (otherParsed.numerator.isZero() && otherParsed.denominator.isZero())
+    ) {
+      return new Fraction(0, 0)
+    }
     if (this.denominator.equals(otherParsed.denominator)) {
       return new Fraction(this.numerator.subtract(otherParsed.numerator), this.denominator)
     }
@@ -76,17 +96,29 @@ export class Fraction {
 
   public lessThan(other: Fraction | BigintIsh): boolean {
     const otherParsed = Fraction.tryParseFraction(other)
-    return this.numerator.multiply(otherParsed.denominator).lesser(otherParsed.numerator.multiply(this.denominator))
+    const difference = this.subtract(otherParsed)
+    return (
+      (difference.numerator.isNegative() && !difference.denominator.isNegative()) ||
+      (difference.numerator.isPositive() && difference.denominator.isNegative())
+    )
   }
 
   public equalTo(other: Fraction | BigintIsh): boolean {
     const otherParsed = Fraction.tryParseFraction(other)
-    return this.numerator.multiply(otherParsed.denominator).equals(otherParsed.numerator.multiply(this.denominator))
+    if (this.denominator.isZero() && otherParsed.denominator.isZero()) {
+      return this.numerator.equals(otherParsed.numerator)
+    }
+    const difference = this.subtract(otherParsed)
+    return difference.numerator.isZero() && !difference.denominator.isZero()
   }
 
   public greaterThan(other: Fraction | BigintIsh): boolean {
     const otherParsed = Fraction.tryParseFraction(other)
-    return this.numerator.multiply(otherParsed.denominator).greater(otherParsed.numerator.multiply(this.denominator))
+    const difference = this.subtract(otherParsed)
+    return (
+      (difference.numerator.isPositive() && !difference.denominator.isNegative()) ||
+      (difference.numerator.isNegative() && difference.denominator.isNegative())
+    )
   }
 
   public multiply(other: Fraction | BigintIsh): Fraction {
@@ -122,7 +154,7 @@ export class Fraction {
     invariant(Number.isInteger(significantDigits), `${significantDigits} is not an integer.`)
     invariant(significantDigits > 0, `${significantDigits} is not positive.`)
 
-    if (this.denominator.equals(0)) {
+    if (this.denominator.isZero()) {
       return this.getDivideByZeroResult()
     }
 
@@ -141,7 +173,7 @@ export class Fraction {
     invariant(Number.isInteger(decimalPlaces), `${decimalPlaces} is not an integer.`)
     invariant(decimalPlaces >= 0, `${decimalPlaces} is negative.`)
 
-    if (this.denominator.equals(0)) {
+    if (this.denominator.isZero()) {
       return this.getDivideByZeroResult()
     }
 

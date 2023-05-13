@@ -28,7 +28,6 @@ describe('Fraction', () => {
         new Fraction(bigInt(52), bigInt(120))
       )
     })
-
     it('same denom', () => {
       expect(new Fraction(bigInt(1), bigInt(5)).add(new Fraction(bigInt(2), bigInt(5)))).toEqual(
         new Fraction(bigInt(3), bigInt(5))
@@ -99,6 +98,41 @@ describe('Fraction', () => {
       const f = new Fraction(1, 2)
       expect(f.asFraction).toEqual(f)
       expect(f === f.asFraction).toEqual(false)
+    })
+  })
+  describe('NaN, Infinity and -Infinity', () => {
+    it('correct', () => {
+      const A = new Fraction(1, 1)
+      const NA = new Fraction(0, 0)
+      const I = new Fraction(1, 0)
+      const NI = new Fraction(-1, 0)
+      const Z = new Fraction(0, 1)
+
+      expect(NA.equalTo(A)).toEqual(false)
+      expect(I.equalTo(I)).toEqual(true)
+      expect(I.equalTo(NI)).toEqual(false)
+      expect(I.equalTo(A)).toEqual(false)
+
+      expect(NA.greaterThan(A)).toEqual(false)
+      expect(A.greaterThan(NA)).toEqual(false)
+      expect(I.greaterThan(A)).toEqual(true)
+
+      expect(A.lessThan(NA)).toEqual(false)
+      expect(NA.lessThan(A)).toEqual(false)
+      expect(NI.lessThan(A)).toEqual(true)
+      
+      expect(NA.add(A).equalTo(NA)).toEqual(true)
+      expect(I.add(A).equalTo(I)).toEqual(true)
+
+      expect(NA.subtract(A).equalTo(NA)).toEqual(true)
+      expect(I.subtract(I).equalTo(NA)).toEqual(true)
+
+      expect(NA.multiply(A).equalTo(NA)).toEqual(true)
+      expect(I.multiply(NI).equalTo(NI)).toEqual(true)
+
+      expect(NA.divide(A).equalTo(NA)).toEqual(true)
+      expect(A.divide(I).equalTo(Z)).toEqual(true)
+      expect(A.divide(NI).equalTo(Z)).toEqual(true)
     })
   })
 })
