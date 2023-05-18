@@ -188,4 +188,12 @@ export class Fraction {
   public get asFraction(): Fraction {
     return new Fraction(this.numerator, this.denominator)
   }
+
+  public adjustDecimals(decimals: number): Fraction {
+    if (this.denominator.isZero()) {
+      return this
+    }
+    const denominator = bigInt(10).pow(decimals);
+    return new Fraction(this.numerator.multiply(denominator).divide(this.denominator), denominator)
+  }
 }

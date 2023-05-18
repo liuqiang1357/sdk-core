@@ -91,4 +91,9 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
     if (this.currency.isToken) return this as CurrencyAmount<Token>
     return CurrencyAmount.fromFractionalAmount(this.currency.wrapped, this.numerator, this.denominator)
   }
+
+  public adjustDecimals(decimals: number = this.currency.decimals): CurrencyAmount<T> {
+    const fraction = super.adjustDecimals(decimals);
+    return CurrencyAmount.fromFractionalAmount(this.currency, fraction.numerator, fraction.denominator)
+  }
 }

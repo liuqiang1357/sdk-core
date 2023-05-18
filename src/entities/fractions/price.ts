@@ -85,4 +85,9 @@ export class Price<TBase extends Currency, TQuote extends Currency> extends Frac
   public toFixed(decimalPlaces: number = 4, format?: object, rounding?: Rounding): string {
     return this.adjustedForDecimals.toFixed(decimalPlaces, format, rounding)
   }
+
+  public adjustDecimals(decimals: number = 4): Price<TBase, TQuote> {
+    const fraction = super.adjustDecimals(decimals);
+    return new Price(this.baseCurrency, this.quoteCurrency, fraction.denominator, fraction.numerator)
+  }
 }
