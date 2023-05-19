@@ -105,7 +105,12 @@ export class Fraction {
 
   public equalTo(other: Fraction | BigintIsh): boolean {
     const otherParsed = Fraction.tryParseFraction(other)
-    if (this.denominator.isZero() && otherParsed.denominator.isZero()) {
+    if (
+      !this.numerator.isZero() &&
+      this.denominator.isZero() &&
+      !otherParsed.numerator.isZero() &&
+      otherParsed.denominator.isZero() 
+    ) {
       return this.numerator.equals(otherParsed.numerator)
     }
     const difference = this.asFraction.subtract(otherParsed)
@@ -193,7 +198,7 @@ export class Fraction {
     if (this.denominator.isZero()) {
       return this
     }
-    const denominator = bigInt(10).pow(decimals);
+    const denominator = bigInt(10).pow(decimals)
     return new Fraction(this.numerator.multiply(denominator).divide(this.denominator), denominator)
   }
 }

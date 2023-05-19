@@ -108,8 +108,10 @@ describe('Fraction', () => {
       const NI = new Fraction(-1, 0)
       const Z = new Fraction(0, 1)
 
-      expect(NA.equalTo(A)).toEqual(false)
+      expect(NA.equalTo(NA)).toEqual(false)
       expect(I.equalTo(I)).toEqual(true)
+      expect(NI.equalTo(NI)).toEqual(true)
+      expect(NA.equalTo(A)).toEqual(false)
       expect(I.equalTo(NI)).toEqual(false)
       expect(I.equalTo(A)).toEqual(false)
 
@@ -121,16 +123,21 @@ describe('Fraction', () => {
       expect(NA.lessThan(A)).toEqual(false)
       expect(NI.lessThan(A)).toEqual(true)
       
-      expect(NA.add(A).equalTo(NA)).toEqual(true)
+      expect(NA.add(A).numerator.equals(0)).toEqual(true)
+      expect(NA.add(A).denominator.equals(0)).toEqual(true)
       expect(I.add(A).equalTo(I)).toEqual(true)
 
-      expect(NA.subtract(A).equalTo(NA)).toEqual(true)
-      expect(I.subtract(I).equalTo(NA)).toEqual(true)
+      expect(NA.subtract(A).numerator.equals(0)).toEqual(true)
+      expect(NA.subtract(A).denominator.equals(0)).toEqual(true)
+      expect(I.subtract(I).numerator.equals(0)).toEqual(true)
+      expect(I.subtract(I).denominator.equals(0)).toEqual(true)
 
-      expect(NA.multiply(A).equalTo(NA)).toEqual(true)
+      expect(NA.multiply(A).numerator.equals(0)).toEqual(true)
+      expect(NA.multiply(A).denominator.equals(0)).toEqual(true)
       expect(I.multiply(NI).equalTo(NI)).toEqual(true)
 
-      expect(NA.divide(A).equalTo(NA)).toEqual(true)
+      expect(NA.divide(A).numerator.equals(0)).toEqual(true)
+      expect(NA.divide(A).denominator.equals(0)).toEqual(true)
       expect(A.divide(I).equalTo(Z)).toEqual(true)
       expect(A.divide(NI).equalTo(Z)).toEqual(true)
     })
