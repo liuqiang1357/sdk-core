@@ -1,4 +1,5 @@
 import bigInt from 'big-integer'
+import BigNumber from 'bignumber.js'
 import { BigintIsh, Rounding } from '../../constants'
 import { Fraction } from './fraction'
 
@@ -13,8 +14,9 @@ function toPercent(fraction: Fraction): Percent {
 }
 
 export class Percent extends Fraction {
-  static fromDecimal(decimal: string): Percent {
-    return toPercent(Fraction.fromDecimal(decimal))
+  static fromDecimalPercent(decimal: string): Percent {
+    const fraction = Fraction.fromDecimal(new BigNumber(decimal).shiftedBy(100).toString())
+    return toPercent(fraction)
   }
 
   /**

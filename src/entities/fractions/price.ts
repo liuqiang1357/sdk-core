@@ -9,15 +9,15 @@ import BigNumber from 'bignumber.js'
 
 export class Price<TBase extends Currency, TQuote extends Currency> extends Fraction {
   static fromDecimalPrice<TBase extends Currency, TQuote extends Currency>(
-		baseCurrency: TBase,
-		quoteCurrency: TQuote,
-		decimal: string,
-	): Price<TBase, TQuote> {
-		const fraction = Fraction.fromDecimal(
-			new BigNumber(decimal).shiftedBy(quoteCurrency.decimals - baseCurrency.decimals).toString(),
-		);
-		return new Price(baseCurrency, quoteCurrency, fraction.denominator, fraction.numerator);
-	}
+    baseCurrency: TBase,
+    quoteCurrency: TQuote,
+    decimal: string
+  ): Price<TBase, TQuote> {
+    const fraction = Fraction.fromDecimal(
+      new BigNumber(decimal).shiftedBy(quoteCurrency.decimals - baseCurrency.decimals).toString()
+    )
+    return new Price(baseCurrency, quoteCurrency, fraction.denominator, fraction.numerator)
+  }
 
   public readonly baseCurrency: TBase // input i.e. denominator
   public readonly quoteCurrency: TQuote // output i.e. numerator
@@ -98,8 +98,7 @@ export class Price<TBase extends Currency, TQuote extends Currency> extends Frac
     return this.adjustedForDecimals.toFixed(decimalPlaces, format, rounding)
   }
 
-  public decimalPlaces(decimalPlaces: number = 4, rounding?: Rounding): Price<TBase, TQuote> {
-    const fraction = super.decimalPlaces(decimalPlaces, rounding);
-    return new Price(this.baseCurrency, this.quoteCurrency, fraction.denominator, fraction.numerator)
+  public decimalPlaces(decimalPlaces?: number, rounding?: Rounding): Price<TBase, TQuote> {
+    return Price.fromDecimalPrice(this.baseCurrency, this.quoteCurrency, this.toFixed(decimalPlaces, undefined, rounding))
   }
 }

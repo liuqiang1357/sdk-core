@@ -7,7 +7,7 @@ import _Big from 'big.js'
 
 import toFormat from 'toformat'
 import { BigintIsh, Rounding } from '../../constants'
-import { decimalToInteger } from '../../utils/convertors'
+import BigNumber from 'bignumber.js'
 
 const Big = toFormat(_Big)
 
@@ -39,8 +39,9 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
   }
 
   static fromDecimalAmount<T extends Currency>(currency: T, decimal: string): CurrencyAmount<T> {
-		return CurrencyAmount.fromRawAmount(currency, decimalToInteger(decimal, currency.decimals));
-	}
+    const fraction = Fraction.fromDecimal(new BigNumber(decimal).shiftedBy(currency.decimals).toString())
+    return CurrencyAmount.fromFractionalAmount(currency, fraction.numerator, fraction.denominator)
+  }
 
   protected constructor(currency: T, numerator: BigintIsh, denominator?: BigintIsh) {
     super(numerator, denominator)
@@ -97,8 +98,7 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
     return CurrencyAmount.fromFractionalAmount(this.currency.wrapped, this.numerator, this.denominator)
   }
 
-  public decimalPlaces(decimalPlaces: number = this.currency.decimals,  rounding?: Rounding): CurrencyAmount<T> {
-    const fraction = super.decimalPlaces(decimalPlaces, rounding);
-    return CurrencyAmount.fromFractionalAmount(this.currency, fraction.numerator, fraction.denominator)
+  public decimalPlaces(decimalPlaces?: number, rounding?: Rounding): CurrencyAmount<T> {
+    return CurrencyAmount.fromDecimalAmount(this.currency, this.toFixed(decimalPlaces, undefined, rounding))
   }
 }
