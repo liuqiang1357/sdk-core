@@ -15,7 +15,7 @@ function toPercent(fraction: Fraction): Percent {
 
 export class Percent extends Fraction {
   static fromDecimalPercent(decimal: string): Percent {
-    const fraction = Fraction.fromDecimal(new BigNumber(decimal).shiftedBy(100).toString())
+    const fraction = Fraction.fromDecimal(new BigNumber(decimal).shiftedBy(-2).toString())
     return toPercent(fraction)
   }
 
