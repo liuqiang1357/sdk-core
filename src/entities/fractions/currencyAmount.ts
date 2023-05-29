@@ -98,7 +98,7 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
     return CurrencyAmount.fromFractionalAmount(this.currency.wrapped, this.numerator, this.denominator)
   }
 
-  public decimalPlaces(decimalPlaces?: number, rounding?: Rounding): CurrencyAmount<T> {
+  public limitDecimals(decimalPlaces?: number, rounding?: Rounding): CurrencyAmount<T> {
     return CurrencyAmount.fromDecimalAmount(this.currency, this.toFixed(decimalPlaces, undefined, rounding))
   }
 }

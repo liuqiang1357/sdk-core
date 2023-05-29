@@ -98,7 +98,7 @@ export class Price<TBase extends Currency, TQuote extends Currency> extends Frac
     return this.adjustedForDecimals.toFixed(decimalPlaces, format, rounding)
   }
 
-  public decimalPlaces(decimalPlaces?: number, rounding?: Rounding): Price<TBase, TQuote> {
+  public limitDecimals(decimalPlaces?: number, rounding?: Rounding): Price<TBase, TQuote> {
     return Price.fromDecimalPrice(this.baseCurrency, this.quoteCurrency, this.toFixed(decimalPlaces, undefined, rounding))
   }
 }

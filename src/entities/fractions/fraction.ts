@@ -211,7 +211,7 @@ export class Fraction {
     return new Fraction(this.numerator, this.denominator)
   }
 
-  public decimalPlaces(decimalPlaces: number, rounding?: Rounding): Fraction {
+  public limitDecimals(decimalPlaces: number, rounding?: Rounding): Fraction {
     return Fraction.fromDecimal(this.toFixed(decimalPlaces, undefined, rounding))
   }
 }

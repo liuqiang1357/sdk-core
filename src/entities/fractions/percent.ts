@@ -48,7 +48,7 @@ export class Percent extends Fraction {
     return super.multiply(ONE_HUNDRED).toFixed(decimalPlaces, format, rounding)
   }
 
-  public decimalPlaces(decimalPlaces: number = 2, rounding?: Rounding): Percent {
-    return toPercent(super.decimalPlaces(decimalPlaces, rounding))
+  public limitDecimals(decimalPlaces?: number, rounding?: Rounding): Percent {
+    return Percent.fromDecimalPercent(this.toFixed(decimalPlaces, undefined, rounding))
   }
 }
