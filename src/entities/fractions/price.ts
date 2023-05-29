@@ -5,8 +5,20 @@ import { BigintIsh, Rounding } from '../../constants'
 import { Currency } from '../currency'
 import { Fraction } from './fraction'
 import { CurrencyAmount } from './currencyAmount'
+import BigNumber from 'bignumber.js'
 
 export class Price<TBase extends Currency, TQuote extends Currency> extends Fraction {
+  static fromDecimalPrice<TBase extends Currency, TQuote extends Currency>(
+		baseCurrency: TBase,
+		quoteCurrency: TQuote,
+		decimal: string,
+	): Price<TBase, TQuote> {
+		const fraction = Fraction.fromDecimal(
+			new BigNumber(decimal).shiftedBy(quoteCurrency.decimals - baseCurrency.decimals).toString(),
+		);
+		return new Price(baseCurrency, quoteCurrency, fraction.denominator, fraction.numerator);
+	}
+
   public readonly baseCurrency: TBase // input i.e. denominator
   public readonly quoteCurrency: TQuote // output i.e. numerator
   public readonly scalar: Fraction // used to adjust the raw fraction w/r/t the decimals of the {base,quote}Token
@@ -86,8 +98,8 @@ export class Price<TBase extends Currency, TQuote extends Currency> extends Frac
     return this.adjustedForDecimals.toFixed(decimalPlaces, format, rounding)
   }
 
-  public adjustDecimals(decimals: number = 4): Price<TBase, TQuote> {
-    const fraction = super.adjustDecimals(decimals);
+  public decimalPlaces(decimalPlaces: number = 4, rounding?: Rounding): Price<TBase, TQuote> {
+    const fraction = super.decimalPlaces(decimalPlaces, rounding);
     return new Price(this.baseCurrency, this.quoteCurrency, fraction.denominator, fraction.numerator)
   }
 }

@@ -13,6 +13,10 @@ function toPercent(fraction: Fraction): Percent {
 }
 
 export class Percent extends Fraction {
+  static fromDecimal(decimal: string): Percent {
+    return toPercent(Fraction.fromDecimal(decimal))
+  }
+
   /**
    * This boolean prevents a fraction from being interpreted as a Percent
    */
@@ -42,7 +46,7 @@ export class Percent extends Fraction {
     return super.multiply(ONE_HUNDRED).toFixed(decimalPlaces, format, rounding)
   }
 
-  public adjustDecimals(decimals: number = 2): Percent {
-    return toPercent(super.adjustDecimals(decimals))
+  public decimalPlaces(decimalPlaces: number = 2, rounding?: Rounding): Percent {
+    return toPercent(super.decimalPlaces(decimalPlaces, rounding))
   }
 }

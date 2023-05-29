@@ -3,8 +3,10 @@ import invariant from 'tiny-invariant'
 import _Decimal from 'decimal.js-light'
 import _Big, { RoundingMode } from 'big.js'
 import toFormat from 'toformat'
+import BigNumber from 'bignumber.js';
 
 import { BigintIsh, Rounding } from '../../constants'
+import { decimalToInteger } from '../../utils/convertors'
 
 const Decimal = toFormat(_Decimal)
 const Big = toFormat(_Big)
@@ -22,6 +24,22 @@ const toFixedRounding = {
 }
 
 export class Fraction {
+  static fromDecimal(decimal: string): Fraction {
+		const bn = new BigNumber(decimal);
+		if (bn.isNaN()) {
+			return new Fraction(0, 0);
+		} else if (bn.eq(Infinity)) {
+			return new Fraction(1, 0);
+		} else if (bn.eq(-Infinity)) {
+			return new Fraction(-1, 0);
+		}
+		const dp = bn.dp();
+		if (dp == null) {
+			return new Fraction(0, 0);
+		}
+		return new Fraction(decimalToInteger(decimal, dp), bigInt(10).pow(dp));
+	}
+
   public readonly numerator: BigInteger
   public readonly denominator: BigInteger
 
@@ -194,11 +212,7 @@ export class Fraction {
     return new Fraction(this.numerator, this.denominator)
   }
 
-  public adjustDecimals(decimals: number): Fraction {
-    if (this.denominator.isZero()) {
-      return this
-    }
-    const denominator = bigInt(10).pow(decimals)
-    return new Fraction(this.numerator.multiply(denominator).divide(this.denominator), denominator)
+  public decimalPlaces(decimalPlaces: number, rounding?: Rounding): Fraction {
+    return Fraction.fromDecimal(this.toFixed(decimalPlaces, undefined, rounding))
   }
 }
