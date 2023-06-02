@@ -8,7 +8,7 @@ import { CurrencyAmount } from './currencyAmount'
 import BigNumber from 'bignumber.js'
 
 export class Price<TBase extends Currency, TQuote extends Currency> extends Fraction {
-  static fromDecimalPrice<TBase extends Currency, TQuote extends Currency>(
+  public static fromDecimalPrice<TBase extends Currency, TQuote extends Currency>(
     baseCurrency: TBase,
     quoteCurrency: TQuote,
     decimal: string

@@ -23,7 +23,7 @@ const toFixedRounding = {
 }
 
 export class Fraction {
-  static fromDecimal(decimal: string): Fraction {
+  public static fromDecimal(decimal: string): Fraction {
     const bn = new BigNumber(decimal)
     if (bn.isNaN()) {
       return new Fraction(0, 0)

@@ -29,16 +29,6 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
     return new CurrencyAmount(currency, numerator, denominator)
   }
 
-    /**
-   * Returns a new currency amount instance from the decimal amount of token
-   * @param currency the currency in the amount
-   * @param decimal the decimal amount
-   */
-  static fromDecimalAmount<T extends Currency>(currency: T, decimal: string): CurrencyAmount<T> {
-    const fraction = Fraction.fromDecimal(new BigNumber(decimal).shiftedBy(currency.decimals).toString())
-    return CurrencyAmount.fromFractionalAmount(currency, fraction.numerator, fraction.denominator)
-  }
-
   /**
    * Returns a new currency amount instance from the unitless amount of token, i.e. the raw amount
    * @param currency the currency in the amount
@@ -52,6 +42,15 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
     return new CurrencyAmount(currency, rawAmount)
   }
 
+    /**
+   * Returns a new currency amount instance from the decimal amount of token
+   * @param currency the currency in the amount
+   * @param decimal the decimal amount
+   */
+  public static fromDecimalAmount<T extends Currency>(currency: T, decimal: string): CurrencyAmount<T> {
+    const fraction = Fraction.fromDecimal(new BigNumber(decimal).shiftedBy(currency.decimals).toString())
+    return CurrencyAmount.fromFractionalAmount(currency, fraction.numerator, fraction.denominator)
+  }
 
   protected constructor(currency: T, numerator: BigintIsh, denominator?: BigintIsh) {
     super(numerator, denominator)
