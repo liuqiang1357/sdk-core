@@ -94,11 +94,15 @@ export class Price<TBase extends Currency, TQuote extends Currency> extends Frac
     return this.adjustedForDecimals.toSignificant(significantDigits, format, rounding)
   }
 
-  public toFixed(decimalPlaces: number = 4, format?: object, rounding?: Rounding): string {
+  public toFixed(decimalPlaces: number, format?: object, rounding?: Rounding): string {
     return this.adjustedForDecimals.toFixed(decimalPlaces, format, rounding)
   }
 
-  public limitDecimals(decimalPlaces?: number, rounding?: Rounding): Price<TBase, TQuote> {
-    return Price.fromDecimalPrice(this.baseCurrency, this.quoteCurrency, this.toFixed(decimalPlaces, undefined, rounding))
+  public limitDecimals(decimalPlaces: number, rounding?: Rounding): Price<TBase, TQuote> {
+    return Price.fromDecimalPrice(
+      this.baseCurrency,
+      this.quoteCurrency,
+      this.toFixed(decimalPlaces, undefined, rounding)
+    )
   }
 }

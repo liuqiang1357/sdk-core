@@ -44,11 +44,11 @@ export class Percent extends Fraction {
     return super.multiply(ONE_HUNDRED).toSignificant(significantDigits, format, rounding)
   }
 
-  public toFixed(decimalPlaces: number = 2, format?: object, rounding?: Rounding): string {
+  public toFixed(decimalPlaces: number, format?: object, rounding?: Rounding): string {
     return super.multiply(ONE_HUNDRED).toFixed(decimalPlaces, format, rounding)
   }
 
-  public limitDecimals(decimalPlaces?: number, rounding?: Rounding): Percent {
+  public limitDecimals(decimalPlaces: number, rounding?: Rounding): Percent {
     return Percent.fromDecimalPercent(this.toFixed(decimalPlaces, undefined, rounding))
   }
 }
